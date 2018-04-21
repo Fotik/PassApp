@@ -32,12 +32,7 @@ class PassEditViewController: UIViewController {
     
     // MARK: - Custom Vars
     
-    private let intervals = [
-        604800, //s (1 week)
-        1209600, //s (2 weeks)
-        2592000 //s (30 days)
-    ]
-    private var generator: PassGen
+    private let generator: PassGen
     
     // MARK: - Init
     
@@ -50,38 +45,33 @@ class PassEditViewController: UIViewController {
     // MARK: - Listeners
     
     @IBAction func togglePasswordInputs(_ sender: UIButton) {
-        if passInput.isSecureTextEntry {
-            passInput.isSecureTextEntry = false
-            passConfirmInput.isSecureTextEntry = false
-            togglePasswordsBtn.titleLabel?.text = "Hide"
-        } else {
-            passInput.isSecureTextEntry = true
-            passConfirmInput.isSecureTextEntry = true
-            togglePasswordsBtn.titleLabel?.text = "Show"
-        }
+        togglePass(passInput.isSecureTextEntry ? .visible : .hidden)
     }
     
     @IBAction func processPassData(_ sender: UIButton) {
         let validationResult = self.validatePassword(passInput.text!, passConfirmInput.text!)
-        if validationResult.type == .error {
-           let alert = UIAlertController(title: "Error", message: validationResult.message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
-        } else {
+        if validationResult.type == .ok {
             var passData: PassData
             
             if notificationEditSwitch.isOn {
-                passData = PassData(resource: nameInput.text!, password: passInput.text!, interval: Date() + TimeInterval(intervals[timeIntervalControl.selectedSegmentIndex]), time: datePicker.date)
+                passData = PassData(resource: nameInput.text!, password: passInput.text!, interval: Date() + TimeInterval(Config.notificationIntervals[timeIntervalControl.selectedSegmentIndex]), time: datePicker.date)
             } else {
                 passData = PassData(resource: nameInput.text!, password: passInput.text!)
             }
-            
-            
+        } else {
+            let alert = UIAlertController(title: "Error", message: validationResult.message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
         }
     }
     
     @IBAction func generatePassword(_ sender: UIButton) {
+        let pass = generator.generate()
         
+        passInput.text = pass
+        passConfirmInput.text = pass
+        
+        togglePass(.visible)
     }
     
     @IBAction func toggleNotificationEdit(_ sender: UISwitch) {
@@ -98,6 +88,8 @@ class PassEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
     }
 
     override func didReceiveMemoryWarning() {
@@ -113,6 +105,20 @@ class PassEditViewController: UIViewController {
         }
         
         return ValidationResult(type: .ok, message: "")
+    }
+    
+    private func togglePass(_ state: VisibilityState) {
+        passInput.isSecureTextEntry = (state != .visible)
+        passConfirmInput.isSecureTextEntry = (state != .visible)
+        togglePasswordsBtn.setTitle((state == .visible) ? "Hide" : "Show", for: .normal)
+    }
+    
+    @objc func backAction() {
+        let confirmAlert = UIAlertController(title: "Are you sure?", message: "All entered data will be lost after this action.", preferredStyle: .alert)
+        confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+            self.navigationController?.popToRootViewController(animated: true)
+        }))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in self.dismiss(animated: true, completion: nil)}))
     }
 
     /*

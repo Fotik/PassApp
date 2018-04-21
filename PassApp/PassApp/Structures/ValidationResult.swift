@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum ValidationResultType: Int {
-    case ok = 0
-    case error = 1
-}
-
 struct ValidationResult {
     var type: ValidationResultType
     var message: String

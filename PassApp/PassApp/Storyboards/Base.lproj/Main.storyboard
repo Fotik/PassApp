@@ -72,13 +72,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Your Passwords" id="BgB-ai-odz">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="QkS-wS-9QY">
-                            <connections>
-                                <action selector="backToPassList:" destination="BYZ-38-t0r" id="R21-ws-XaQ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Your Passwords" id="BgB-ai-odz"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
