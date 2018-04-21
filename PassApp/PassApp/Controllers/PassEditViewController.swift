@@ -33,11 +33,13 @@ class PassEditViewController: UIViewController {
     // MARK: - Custom Vars
     
     private let generator: PassGen
+    private let storage: Storage
     
     // MARK: - Init
     
     required init?(coder: NSCoder) {
         self.generator = PassGen()
+        self.storage = Storage()
         
         super.init(coder: coder)
     }
@@ -58,6 +60,8 @@ class PassEditViewController: UIViewController {
             } else {
                 passData = PassData(resource: nameInput.text!, password: passInput.text!)
             }
+            
+            storage.savePass(passData)
         } else {
             let alert = UIAlertController(title: "Error", message: validationResult.message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -89,6 +93,8 @@ class PassEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initDelegates()
+        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
     }
 
@@ -99,12 +105,27 @@ class PassEditViewController: UIViewController {
     
     // MARK: - Custom Funcs
     
-    func validatePassword(_ password: String, _ confirm: String) -> ValidationResult {
-        if (password != confirm) {
-            return ValidationResult(type: .error, message: "Paswords in both fields must be the same")
+    private func validateData() -> ValidationResult {
+        if (nameInput.text == "" || passInput.text == "" || passConfirmInput.text == "") {
+            return ValidationResult(type: .error, message: "All text fields must be not empty")
+        }
+        
+        let passValidationResult = validatePassword(passInput.text!, passConfirmInput.text!)
+        if (passValidationResult.type == .error) {
+            return passValidationResult;
         }
         
         return ValidationResult(type: .ok, message: "")
+    }
+    
+    private func validatePassword(_ password: String, _ confirm: String) -> ValidationResult {
+        return password != confirm ? ValidationResult(type: .error, message: "Paswords in both fields must be the same") : ValidationResult(type: .ok, message: "")
+    }
+    
+    private func initDelegates() {
+        nameInput.delegate = self
+        passInput.delegate = self
+        passConfirmInput.delegate = self
     }
     
     private func togglePass(_ state: VisibilityState) {
@@ -136,6 +157,6 @@ class PassEditViewController: UIViewController {
 extension PassEditViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        return false
+        return true
     }
 }

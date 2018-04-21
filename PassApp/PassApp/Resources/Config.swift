@@ -19,4 +19,7 @@ struct Config {
     // PassGen params
     static let initPassLength = 8
     static let passLenRange = 5
+    
+    // Storage Params
+    static let passwordsArrayKey = "passwords"
 }

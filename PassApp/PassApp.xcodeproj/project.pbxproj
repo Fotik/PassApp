@@ -18,6 +18,7 @@
 		2684B32E2081FABD008B85D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2684B32D2081FABD008B85D0 /* Assets.xcassets */; };
 		2684B3312081FABD008B85D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2684B32F2081FABD008B85D0 /* LaunchScreen.storyboard */; };
 		26CFB09A208B3C7200A7C466 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CFB099208B3C7200A7C466 /* CustomTypes.swift */; };
+		26CFB09D208B4C4F00A7C466 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CFB09C208B4C4F00A7C466 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		2684B3302081FABD008B85D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2684B3322081FABD008B85D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26CFB099208B3C7200A7C466 /* CustomTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTypes.swift; sourceTree = "<group>"; };
+		26CFB09C208B4C4F00A7C466 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				265573402085EB7900FF0BE1 /* PassGen.swift */,
+				26CFB09C208B4C4F00A7C466 /* Storage.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				2655733F2085E3B400FF0BE1 /* PassEditViewController.swift in Sources */,
 				265573412085EB7900FF0BE1 /* PassGen.swift in Sources */,
 				2635A20F2089064200D4B22D /* Config.swift in Sources */,
+				26CFB09D208B4C4F00A7C466 /* Storage.swift in Sources */,
 				2684B3292081FAB5008B85D0 /* ViewController.swift in Sources */,
 				26557343208602A200FF0BE1 /* ValidationResult.swift in Sources */,
 				2684B3272081FAB5008B85D0 /* AppDelegate.swift in Sources */,
