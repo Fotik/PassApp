@@ -197,7 +197,7 @@
                                                             <segment title="1 Month"/>
                                                         </segments>
                                                     </segmentedControl>
-                                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="p2k-6c-U06">
+                                                    <datePicker contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="p2k-6c-U06">
                                                         <rect key="frame" x="0.0" y="36" width="288" height="216"/>
                                                         <date key="date" timeIntervalSinceReferenceDate="545391783.82014799">
                                                             <!--2018-04-14 09:43:03 +0000-->

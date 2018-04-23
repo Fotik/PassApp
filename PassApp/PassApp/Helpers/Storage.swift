@@ -9,30 +9,28 @@
 import Foundation
 
 class Storage {
-    private var passwords: [PassData]?
+    private var passKeeper: PassKeeper
     
-    func getPasswords() -> [PassData] {
-        if passwords == nil {
-            loadPasswords()
-        }
-        
-        // Passwords must be not nil here !!!
-        return passwords!
+    init() {
+        passKeeper = PassKeeper()
     }
     
-    func loadPasswords() {
-        // This method must set the passwords member not nil value
-        passwords = UserDefaults.standard.array(forKey: "\(Config.passwordsArrayKey)") as? [PassData] ?? []
+    func getPasswords() -> [PassData] {
+        return passKeeper.getPasswords() ?? loadPasswords()
+    }
+    
+    func loadPasswords() -> [PassData] {
+        passKeeper.setPasswords(NSKeyedUnarchiver.unarchiveObject(with: UserDefaults.standard.object(forKey: Config.passwordsArrayKey) as? Data ?? Data()) as? [PassData] ?? [])
+        
+        return passKeeper.getPasswords() ?? []
     }
     
     func setPasswords(_ passArray: [PassData]) {
-        passwords = passArray
+        passKeeper.setPasswords(passArray)
     }
     
     func savePass(_ pass: PassData) {
-        var passArray = getPasswords()
-        passArray.append(pass)
-        UserDefaults.standard.set(passArray, forKey: "\(Config.passwordsArrayKey)")
-        setPasswords(passArray)
+        passKeeper.addPass(pass)
+        UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: passKeeper), forKey: Config.passwordsArrayKey)
     }
 }

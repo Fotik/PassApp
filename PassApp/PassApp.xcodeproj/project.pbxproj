@@ -12,6 +12,7 @@
 		265573412085EB7900FF0BE1 /* PassGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265573402085EB7900FF0BE1 /* PassGen.swift */; };
 		26557343208602A200FF0BE1 /* ValidationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26557342208602A200FF0BE1 /* ValidationResult.swift */; };
 		265573452086072400FF0BE1 /* PassData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265573442086072400FF0BE1 /* PassData.swift */; };
+		265CEE55208DE4C00007CA88 /* PassKeeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265CEE54208DE4BF0007CA88 /* PassKeeper.swift */; };
 		2684B3272081FAB5008B85D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2684B3262081FAB5008B85D0 /* AppDelegate.swift */; };
 		2684B3292081FAB5008B85D0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2684B3282081FAB5008B85D0 /* ViewController.swift */; };
 		2684B32C2081FAB5008B85D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2684B32A2081FAB5008B85D0 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 		265573402085EB7900FF0BE1 /* PassGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassGen.swift; sourceTree = "<group>"; };
 		26557342208602A200FF0BE1 /* ValidationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationResult.swift; sourceTree = "<group>"; };
 		265573442086072400FF0BE1 /* PassData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassData.swift; sourceTree = "<group>"; };
+		265CEE54208DE4BF0007CA88 /* PassKeeper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassKeeper.swift; sourceTree = "<group>"; };
 		2684B3232081FAB5008B85D0 /* PassApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PassApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2684B3262081FAB5008B85D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2684B3282081FAB5008B85D0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			children = (
 				2635A20E2089064200D4B22D /* Config.swift */,
 				26CFB099208B3C7200A7C466 /* CustomTypes.swift */,
+				265CEE54208DE4BF0007CA88 /* PassKeeper.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 			files = (
 				265573452086072400FF0BE1 /* PassData.swift in Sources */,
 				26CFB09A208B3C7200A7C466 /* CustomTypes.swift in Sources */,
+				265CEE55208DE4C00007CA88 /* PassKeeper.swift in Sources */,
 				2655733F2085E3B400FF0BE1 /* PassEditViewController.swift in Sources */,
 				265573412085EB7900FF0BE1 /* PassGen.swift in Sources */,
 				2635A20F2089064200D4B22D /* Config.swift in Sources */,

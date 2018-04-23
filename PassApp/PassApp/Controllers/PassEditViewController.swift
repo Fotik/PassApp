@@ -34,12 +34,13 @@ class PassEditViewController: UIViewController {
     
     private let generator: PassGen
     private let storage: Storage
+    private var datePickerHeight: CGFloat = 0
     
     // MARK: - Init
     
     required init?(coder: NSCoder) {
-        self.generator = PassGen()
-        self.storage = Storage()
+        generator = PassGen()
+        storage = Storage()
         
         super.init(coder: coder)
     }
@@ -51,7 +52,7 @@ class PassEditViewController: UIViewController {
     }
     
     @IBAction func processPassData(_ sender: UIButton) {
-        let validationResult = self.validatePassword(passInput.text!, passConfirmInput.text!)
+        let validationResult = self.validateData()
         if validationResult.type == .ok {
             var passData: PassData
             
@@ -62,6 +63,9 @@ class PassEditViewController: UIViewController {
             }
             
             storage.savePass(passData)
+            
+            let prevViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainPage")
+            self.navigationController?.pushViewController(prevViewController!, animated: true)
         } else {
             let alert = UIAlertController(title: "Error", message: validationResult.message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -81,9 +85,11 @@ class PassEditViewController: UIViewController {
     @IBAction func toggleNotificationEdit(_ sender: UISwitch) {
         if sender.isOn {
             notificationEditView.isHidden = false
+            notificationEditView.bounds.size.height = datePickerHeight
             notificationEditSwitchLabel.text = "Disable notifications"
         } else {
             notificationEditView.isHidden = true
+            notificationEditView.bounds.size.height = 0
             notificationEditSwitchLabel.text = "Enable notifications"
         }
     }
@@ -94,6 +100,7 @@ class PassEditViewController: UIViewController {
         super.viewDidLoad()
         
         initDelegates()
+        datePickerHeight = datePicker.bounds.size.height
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
     }
