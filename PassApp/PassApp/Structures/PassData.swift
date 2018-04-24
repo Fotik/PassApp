@@ -9,7 +9,6 @@
 import Foundation
 
 struct PassData: Codable {
-    var id = 0
     var resource: String
     var password: String
     var notificationInterval: Date?

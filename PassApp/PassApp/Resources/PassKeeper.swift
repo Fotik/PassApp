@@ -9,16 +9,16 @@
 import Foundation
 
 class PassKeeper {
-    private var passwords: [PassData]?
+    private var passwords: [PassData] = []
     
     init() {}
     
-    init(_ passwords: [PassData]?) {
+    init(_ passwords: [PassData]) {
         self.passwords = passwords
     }
     
-    func getPasswords() -> [PassData]? {
-        return passwords ?? nil
+    func getPasswords() -> [PassData] {
+        return passwords
     }
     
     func setPasswords(_ passArray: [PassData]) {
@@ -26,10 +26,15 @@ class PassKeeper {
     }
     
     func addPass(_ pass: PassData) {
-        if (passwords != nil) {
-            passwords?.append(pass)
+        passwords.append(pass)
+    }
+    
+    func delete(_ index: Int) -> Bool {
+        if (passwords.count > index) {
+            passwords.remove(at: index)
+            return true
         } else {
-            passwords = [pass]
+            return false
         }
     }
 }

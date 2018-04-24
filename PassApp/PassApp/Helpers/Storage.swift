@@ -13,19 +13,18 @@ class Storage {
     
     init() {
         passKeeper = PassKeeper()
+        loadPasswords()
     }
     
     func getPasswords() -> [PassData] {
-        return passKeeper.getPasswords() ?? loadPasswords()
+        return passKeeper.getPasswords()
     }
     
-    func loadPasswords() -> [PassData] {
+    func loadPasswords() {
         if let data = UserDefaults.standard.value(forKey: Config.passwordsArrayKey) as? Data {
             let passwords = try? PropertyListDecoder().decode(Array<PassData>.self, from: data)
             passKeeper.setPasswords(passwords ?? [])
         }
-        
-        return passKeeper.getPasswords() ?? []
     }
     
     func setPasswords(_ passArray: [PassData]) {
@@ -33,10 +32,19 @@ class Storage {
     }
     
     func savePass(_ pass: PassData) {
-        var newPass = pass;
-        let lastPass = passKeeper.getPasswords()?.last
-        newPass.id = (lastPass != nil) ? lastPass!.id + 1 : 1
-        passKeeper.addPass(newPass)
+        passKeeper.addPass(pass)
         UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
+    }
+    
+    func getPass(_ index: Int) -> PassData? {
+        let passwords = passKeeper.getPasswords()
+        
+        return (passwords.count > index) ? passwords[index] : nil
+    }
+    
+    func deletePass(_ index: Int) {
+        if (passKeeper.delete(index)) {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
+        }
     }
 }
