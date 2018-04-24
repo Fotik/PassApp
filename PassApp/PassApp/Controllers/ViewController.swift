@@ -9,10 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBAction func backToPassList(_ sender: UIBarButtonItem) {
-        
-    }
+    
+    let storage = Singleton.storage
     
     override func viewDidLoad() {
         super.viewDidLoad()

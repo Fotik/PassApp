@@ -20,7 +20,10 @@ class Storage {
     }
     
     func loadPasswords() -> [PassData] {
-        passKeeper.setPasswords(NSKeyedUnarchiver.unarchiveObject(with: UserDefaults.standard.object(forKey: Config.passwordsArrayKey) as? Data ?? Data()) as? [PassData] ?? [])
+        if let data = UserDefaults.standard.value(forKey: Config.passwordsArrayKey) as? Data {
+            let passwords = try? PropertyListDecoder().decode(Array<PassData>.self, from: data)
+            passKeeper.setPasswords(passwords ?? [])
+        }
         
         return passKeeper.getPasswords() ?? []
     }
@@ -30,7 +33,10 @@ class Storage {
     }
     
     func savePass(_ pass: PassData) {
-        passKeeper.addPass(pass)
-        UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: passKeeper), forKey: Config.passwordsArrayKey)
+        var newPass = pass;
+        let lastPass = passKeeper.getPasswords()?.last
+        newPass.id = (lastPass != nil) ? lastPass!.id + 1 : 1
+        passKeeper.addPass(newPass)
+        UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
     }
 }

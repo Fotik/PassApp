@@ -32,18 +32,8 @@ class PassEditViewController: UIViewController {
     
     // MARK: - Custom Vars
     
-    private let generator: PassGen
-    private let storage: Storage
-    private var datePickerHeight: CGFloat = 0
-    
-    // MARK: - Init
-    
-    required init?(coder: NSCoder) {
-        generator = PassGen()
-        storage = Storage()
-        
-        super.init(coder: coder)
-    }
+    private let generator = Singleton.passGen
+    private let storage = Singleton.storage
     
     // MARK: - Listeners
     
@@ -57,15 +47,13 @@ class PassEditViewController: UIViewController {
             var passData: PassData
             
             if notificationEditSwitch.isOn {
-                passData = PassData(resource: nameInput.text!, password: passInput.text!, interval: Date() + TimeInterval(Config.notificationIntervals[timeIntervalControl.selectedSegmentIndex]), time: datePicker.date)
+                passData = PassData(nameInput.text!, passInput.text!, Date() + TimeInterval(Config.notificationIntervals[timeIntervalControl.selectedSegmentIndex]), datePicker.date)
             } else {
-                passData = PassData(resource: nameInput.text!, password: passInput.text!)
+                passData = PassData(nameInput.text!, passInput.text!)
             }
             
             storage.savePass(passData)
-            
-            let prevViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainPage")
-            self.navigationController?.pushViewController(prevViewController!, animated: true)
+            self.navigationController?.popViewController(animated: true)
         } else {
             let alert = UIAlertController(title: "Error", message: validationResult.message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -85,11 +73,9 @@ class PassEditViewController: UIViewController {
     @IBAction func toggleNotificationEdit(_ sender: UISwitch) {
         if sender.isOn {
             notificationEditView.isHidden = false
-            notificationEditView.bounds.size.height = datePickerHeight
             notificationEditSwitchLabel.text = "Disable notifications"
         } else {
             notificationEditView.isHidden = true
-            notificationEditView.bounds.size.height = 0
             notificationEditSwitchLabel.text = "Enable notifications"
         }
     }
@@ -100,14 +86,14 @@ class PassEditViewController: UIViewController {
         super.viewDidLoad()
         
         initDelegates()
-        datePickerHeight = datePicker.bounds.size.height
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        storage.setPasswords([])
     }
     
     // MARK: - Custom Funcs
@@ -147,6 +133,7 @@ class PassEditViewController: UIViewController {
             self.navigationController?.popToRootViewController(animated: true)
         }))
         confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in self.dismiss(animated: true, completion: nil)}))
+        present(confirmAlert, animated: true, completion: nil)
     }
 
     /*

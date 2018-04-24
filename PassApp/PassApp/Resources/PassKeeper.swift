@@ -8,20 +8,13 @@
 
 import Foundation
 
-class PassKeeper: NSObject, NSCoding {
+class PassKeeper {
     private var passwords: [PassData]?
     
-    override init() {
-        super.init()
-    }
+    init() {}
     
     init(_ passwords: [PassData]?) {
         self.passwords = passwords
-    }
-    
-    required convenience init(coder decoder: NSCoder) {
-        let passwords = decoder.decodeObject(forKey: Config.passwordsArrayKey) as? [PassData] ?? nil
-        self.init(passwords)
     }
     
     func getPasswords() -> [PassData]? {
@@ -38,9 +31,5 @@ class PassKeeper: NSObject, NSCoding {
         } else {
             passwords = [pass]
         }
-    }
-    
-    func encode(with coder: NSCoder) {
-        coder.encode(passwords, forKey: Config.passwordsArrayKey)
     }
 }
