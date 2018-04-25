@@ -22,4 +22,5 @@ struct Config {
     
     // Storage Params
     static let passwordsArrayKey = "passwords"
+    static let lastPassIndexKey = "theGreatAppCrashCounter"
 }

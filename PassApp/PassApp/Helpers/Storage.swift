@@ -53,4 +53,24 @@ class Storage {
             UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
         }
     }
+    
+    func getLastPassIndex() -> UInt {
+        let index = UserDefaults.standard.value(forKey: Config.lastPassIndexKey) as? UInt
+        if index == nil {
+            UserDefaults.standard.set(0, forKey: Config.lastPassIndexKey)
+            return UInt(0)
+        } else {
+            return index!
+        }
+    }
+    
+    func riseLastPassIndex() {
+        let index = UserDefaults.standard.value(forKey: Config.lastPassIndexKey) as? UInt
+        
+        if index != nil {
+            UserDefaults.standard.set(index! + 1, forKey: Config.lastPassIndexKey)
+        } else {
+            UserDefaults.standard.set(0, forKey: Config.lastPassIndexKey)
+        }
+    }
 }

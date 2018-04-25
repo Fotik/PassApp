@@ -7,21 +7,21 @@
 //
 
 import Foundation
+import UserNotifications
 
 struct PassData: Codable {
     var resource: String
     var password: String
-    var notificationInterval: Date?
-    var notificationTime: Date?
+    var notificationTime: DateComponents?
+    var notificationIdentifier: UNNotificationRequest?
     
     init(_ resource: String, _ password: String) {
         self.resource = resource
         self.password = password
     }
     
-    init(_ resource: String, _ password: String, _ interval: Date?, _ time: Date?) {
+    init(_ resource: String, _ password: String, _ time: DateComponents?) {
         self.init(resource, password)
-        self.notificationInterval = interval ?? nil
         self.notificationTime = time ?? nil
     }
 }

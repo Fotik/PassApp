@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class PassEditViewController: UIViewController {
     
@@ -48,7 +49,7 @@ class PassEditViewController: UIViewController {
             var passData: PassData
             
             if notificationEditSwitch.isOn {
-                passData = PassData(nameInput.text!, passInput.text!, Date() + TimeInterval(Config.notificationIntervals[timeIntervalControl.selectedSegmentIndex]), datePicker.date)
+                passData = PassData(nameInput.text!, passInput.text!, getNotificationTime(Config.notificationIntervals[timeIntervalControl.selectedSegmentIndex], datePicker.date))
             } else {
                 passData = PassData(nameInput.text!, passInput.text!)
             }
@@ -132,10 +133,16 @@ class PassEditViewController: UIViewController {
     }
     
     private func save(_ pass: PassData) {
+        var passToSave = pass
+        
         if passIndex != nil {
-            storage.updatePass(passIndex!, pass)
+            storage.updatePass(passIndex!, passToSave)
         } else {
-            storage.savePass(pass)
+            if passToSave.notificationTime != nil {
+                passToSave.notificationIdentifier = setNotification(passToSave)
+                storage.riseLastPassIndex()
+            }
+            storage.savePass(passToSave)
         }
     }
     
@@ -145,6 +152,31 @@ class PassEditViewController: UIViewController {
         nameInput.text = pass.resource
         passInput.text = pass.password
         passConfirmInput.text = pass.password
+    }
+    
+    private func getNotificationTime(_ interval: Int, _ time: Date) -> DateComponents {
+        var dateInfo = DateComponents()
+        let intervalDate = Date() + TimeInterval(interval)
+        
+        dateInfo.year = Calendar.current.component(.year, from: intervalDate)
+        dateInfo.month = Calendar.current.component(.month, from: intervalDate)
+        dateInfo.day = Calendar.current.component(.day, from: intervalDate)
+        dateInfo.hour = Calendar.current.component(.hour, from: time)
+        dateInfo.minute = Calendar.current.component(.minute, from: time)
+        
+        return dateInfo
+    }
+    
+    private func setNotification(_ pass: PassData) -> UNNotificationRequest? {
+        guard pass.notificationTime != nil else {return nil}
+        
+        let content = UNMutableNotificationContent()
+        content.title = NSString.localizedUserNotificationString(forKey: "Change password", arguments: nil)
+        content.body = NSString.localizedUserNotificationString(forKey: "You need to update the password for \(pass.resource)", arguments: nil)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: pass.notificationTime!, repeats: false)
+        
+        return UNNotificationRequest(identifier: "passAlert_\(storage.getLastPassIndex())", content: content, trigger: trigger)
     }
     
     @objc func backAction() {
