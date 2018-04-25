@@ -9,9 +9,10 @@
 import Foundation
 import UIKit
 
-class PassTableDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
+class PassTableDataSource: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let storage = Singleton.storage
     let passCellIdentifier = "PassCell"
+    var superController: UIViewController?
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -22,10 +23,11 @@ class PassTableDataSource: NSObject, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: passCellIdentifier)!
+        let cell = tableView.dequeueReusableCell(withIdentifier: passCellIdentifier) as! PassTableViewCell
         let pass = storage.getPass(indexPath.row)
         if (pass != nil) {
-            cell.textLabel?.text = pass!.resource
+            cell.passIndex = indexPath.row
+            cell.resourceLabel.text = pass!.resource
         }
         
         return cell
@@ -36,7 +38,15 @@ class PassTableDataSource: NSObject, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        storage.deletePass(indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .fade)
+        let confirmAlert = UIAlertController(title: "Are you sure?", message: "Thiss password will be permanently lost!", preferredStyle: .alert)
+        confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+            self.storage.deletePass(indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in
+            confirmAlert.dismiss(animated: true, completion: nil)
+        }))
+        
+        superController?.present(confirmAlert, animated: true, completion: nil)
     }
 }

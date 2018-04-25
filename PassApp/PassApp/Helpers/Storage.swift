@@ -36,6 +36,12 @@ class Storage {
         UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
     }
     
+    func updatePass(_ index: Int, _ data: PassData) {
+        if passKeeper.update(index, data) {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
+        }
+    }
+    
     func getPass(_ index: Int) -> PassData? {
         let passwords = passKeeper.getPasswords()
         
@@ -43,7 +49,7 @@ class Storage {
     }
     
     func deletePass(_ index: Int) {
-        if (passKeeper.delete(index)) {
+        if passKeeper.delete(index) {
             UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
         }
     }

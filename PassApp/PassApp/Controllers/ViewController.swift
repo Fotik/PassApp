@@ -19,6 +19,7 @@ class ViewController: UIViewController {
         
         passTable.delegate = tableHandler
         passTable.dataSource = tableHandler
+        tableHandler.superController = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -32,6 +33,17 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let target = segue.destination as? PassEditViewController else {return}
+        guard let button = sender as? UIButton else {return}
+        guard let cell = button.superview?.superview as? PassTableViewCell else {return}
+        
+        if segue.identifier! == "passEditSegue" {
+            if cell.passIndex != nil {
+                target.passIndex = cell.passIndex!
+            }
+        }
+    }
 
 }
 

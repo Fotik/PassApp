@@ -34,6 +34,7 @@ class PassEditViewController: UIViewController {
     
     private let generator = Singleton.passGen
     private let storage = Singleton.storage
+    var passIndex: Int?
     
     // MARK: - Listeners
     
@@ -52,7 +53,7 @@ class PassEditViewController: UIViewController {
                 passData = PassData(nameInput.text!, passInput.text!)
             }
             
-            storage.savePass(passData)
+            save(passData)
             self.navigationController?.popViewController(animated: true)
         } else {
             let alert = UIAlertController(title: "Error", message: validationResult.message, preferredStyle: .alert)
@@ -86,6 +87,9 @@ class PassEditViewController: UIViewController {
         super.viewDidLoad()
         
         initDelegates()
+        if passIndex != nil {
+            fillData()
+        }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
     }
@@ -125,6 +129,22 @@ class PassEditViewController: UIViewController {
         passInput.isSecureTextEntry = (state != .visible)
         passConfirmInput.isSecureTextEntry = (state != .visible)
         togglePasswordsBtn.setTitle((state == .visible) ? "Hide" : "Show", for: .normal)
+    }
+    
+    private func save(_ pass: PassData) {
+        if passIndex != nil {
+            storage.updatePass(passIndex!, pass)
+        } else {
+            storage.savePass(pass)
+        }
+    }
+    
+    private func fillData() {
+        guard let pass = storage.getPass(passIndex!) else {return}
+        
+        nameInput.text = pass.resource
+        passInput.text = pass.password
+        passConfirmInput.text = pass.password
     }
     
     @objc func backAction() {

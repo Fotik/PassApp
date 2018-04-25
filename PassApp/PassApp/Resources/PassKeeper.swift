@@ -29,6 +29,15 @@ class PassKeeper {
         passwords.append(pass)
     }
     
+    func update(_ index: Int, _ data: PassData) -> Bool {
+        if (passwords.count > index) {
+            passwords[index] = data
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func delete(_ index: Int) -> Bool {
         if (passwords.count > index) {
             passwords.remove(at: index)

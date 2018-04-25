@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261875FD209076E400F22AE7 /* PassTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261875FC209076E400F22AE7 /* PassTableViewCell.swift */; };
 		2635A20F2089064200D4B22D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2635A20E2089064200D4B22D /* Config.swift */; };
 		2655733F2085E3B400FF0BE1 /* PassEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2655733E2085E3B400FF0BE1 /* PassEditViewController.swift */; };
 		265573412085EB7900FF0BE1 /* PassGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265573402085EB7900FF0BE1 /* PassGen.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		261875FC209076E400F22AE7 /* PassTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassTableViewCell.swift; sourceTree = "<group>"; };
 		2635A20E2089064200D4B22D /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		2655733E2085E3B400FF0BE1 /* PassEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEditViewController.swift; sourceTree = "<group>"; };
 		265573402085EB7900FF0BE1 /* PassGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassGen.swift; sourceTree = "<group>"; };
@@ -55,6 +57,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		261875FB2090753500F22AE7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				261875FC209076E400F22AE7 /* PassTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		267E92B7208B315C00F0F845 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +102,7 @@
 		2684B3252081FAB5008B85D0 /* PassApp */ = {
 			isa = PBXGroup;
 			children = (
+				261875FB2090753500F22AE7 /* Views */,
 				26CFB09B208B3CD700A7C466 /* Resources */,
 				26CFB097208B321800A7C466 /* Helpers */,
 				26CFB096208B31DD00A7C466 /* Structures */,
@@ -213,6 +224,7 @@
 				2635A20F2089064200D4B22D /* Config.swift in Sources */,
 				26EE5D24208F4584000CFB98 /* PassTableDataSource.swift in Sources */,
 				26EE5D1B208F2213000CFB98 /* Singleton.swift in Sources */,
+				261875FD209076E400F22AE7 /* PassTableViewCell.swift in Sources */,
 				26CFB09D208B4C4F00A7C466 /* Storage.swift in Sources */,
 				2684B3292081FAB5008B85D0 /* ViewController.swift in Sources */,
 				26557343208602A200FF0BE1 /* ValidationResult.swift in Sources */,

@@ -36,7 +36,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="IX0-xw-0tI" kind="show" id="1x8-Pt-HEb"/>
+                                                    <segue destination="IX0-xw-0tI" kind="show" identifier="createPassSegue" id="1x8-Pt-HEb"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -51,13 +51,68 @@
                                         <rect key="frame" x="0.0" y="100" width="320" height="316"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PassCell" id="KRv-P7-Xnl">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PassCell" id="KRv-P7-Xnl" customClass="PassTableViewCell" customModule="PassApp" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KRv-P7-Xnl" id="4wC-78-vdz">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKX-HK-IZd">
+                                                            <rect key="frame" x="0.0" y="0.0" width="192" height="43.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XxK-Oz-NIk">
+                                                            <rect key="frame" x="192" y="0.0" width="64" height="43"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="64" id="0lx-RU-CuZ"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Copy"/>
+                                                            <state key="selected">
+                                                                <color key="titleColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleShadowColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="copyPass:" destination="KRv-P7-Xnl" eventType="touchUpInside" id="rh8-uN-4W4"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCk-6w-OJE">
+                                                            <rect key="frame" x="256" y="0.0" width="64" height="43"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="64" id="1Hv-eC-O4O"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Edit"/>
+                                                            <state key="selected">
+                                                                <color key="titleColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleShadowColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <segue destination="IX0-xw-0tI" kind="show" identifier="passEditSegue" id="L8j-NN-1wJ"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="xKX-HK-IZd" secondAttribute="bottom" id="9SX-Vi-RUU"/>
+                                                        <constraint firstItem="XxK-Oz-NIk" firstAttribute="leading" secondItem="xKX-HK-IZd" secondAttribute="trailing" id="A6W-gx-Iau"/>
+                                                        <constraint firstItem="mCk-6w-OJE" firstAttribute="leading" secondItem="XxK-Oz-NIk" secondAttribute="trailing" id="bZG-Fu-Vbv"/>
+                                                        <constraint firstAttribute="trailing" secondItem="mCk-6w-OJE" secondAttribute="trailing" id="dfM-He-YOb"/>
+                                                        <constraint firstItem="xKX-HK-IZd" firstAttribute="leading" secondItem="4wC-78-vdz" secondAttribute="leading" id="hSW-qm-lfv"/>
+                                                        <constraint firstAttribute="bottom" secondItem="mCk-6w-OJE" secondAttribute="bottom" id="iDv-Qw-19J"/>
+                                                        <constraint firstAttribute="bottom" secondItem="XxK-Oz-NIk" secondAttribute="bottom" id="j0b-jP-dA2"/>
+                                                        <constraint firstItem="XxK-Oz-NIk" firstAttribute="top" secondItem="4wC-78-vdz" secondAttribute="top" id="url-AT-0L2"/>
+                                                        <constraint firstItem="mCk-6w-OJE" firstAttribute="top" secondItem="4wC-78-vdz" secondAttribute="top" id="ycT-Vi-lYv"/>
+                                                        <constraint firstItem="xKX-HK-IZd" firstAttribute="top" secondItem="4wC-78-vdz" secondAttribute="top" id="zoW-1y-WnT"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="resourceLabel" destination="xKX-HK-IZd" id="htd-Ng-0sx"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
@@ -89,7 +144,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="903" y="-564"/>
+            <point key="canvasLocation" x="901.875" y="-565"/>
         </scene>
         <!--Pass Edit-->
         <scene sceneID="L4F-tI-2W7">
@@ -332,4 +387,7 @@
             <point key="canvasLocation" x="136.80000000000001" y="-564.46776611694156"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="1x8-Pt-HEb"/>
+    </inferredMetricsTieBreakers>
 </document>
