@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261161622091C69C0099B542 /* ComparePasswordsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261161612091C69C0099B542 /* ComparePasswordsResult.swift */; };
 		261875FD209076E400F22AE7 /* PassTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261875FC209076E400F22AE7 /* PassTableViewCell.swift */; };
 		2635A20F2089064200D4B22D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2635A20E2089064200D4B22D /* Config.swift */; };
 		2655733F2085E3B400FF0BE1 /* PassEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2655733E2085E3B400FF0BE1 /* PassEditViewController.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		261161612091C69C0099B542 /* ComparePasswordsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparePasswordsResult.swift; sourceTree = "<group>"; };
 		261875FC209076E400F22AE7 /* PassTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassTableViewCell.swift; sourceTree = "<group>"; };
 		2635A20E2089064200D4B22D /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		2655733E2085E3B400FF0BE1 /* PassEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEditViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			children = (
 				26557342208602A200FF0BE1 /* ValidationResult.swift */,
 				265573442086072400FF0BE1 /* PassData.swift */,
+				261161612091C69C0099B542 /* ComparePasswordsResult.swift */,
 			);
 			path = Structures;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 				265573452086072400FF0BE1 /* PassData.swift in Sources */,
 				26CFB09A208B3C7200A7C466 /* CustomTypes.swift in Sources */,
 				265CEE55208DE4C00007CA88 /* PassKeeper.swift in Sources */,
+				261161622091C69C0099B542 /* ComparePasswordsResult.swift in Sources */,
 				2655733F2085E3B400FF0BE1 /* PassEditViewController.swift in Sources */,
 				265573412085EB7900FF0BE1 /* PassGen.swift in Sources */,
 				2635A20F2089064200D4B22D /* Config.swift in Sources */,

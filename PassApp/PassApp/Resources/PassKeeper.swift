@@ -9,7 +9,7 @@
 import Foundation
 
 class PassKeeper {
-    private var passwords: [PassData] = []
+    private var passwords: [PassData]?
     
     init() {}
     
@@ -17,8 +17,8 @@ class PassKeeper {
         self.passwords = passwords
     }
     
-    func getPasswords() -> [PassData] {
-        return passwords
+    func getPasswords() -> [PassData]? {
+        return passwords ?? nil
     }
     
     func setPasswords(_ passArray: [PassData]) {
@@ -26,12 +26,24 @@ class PassKeeper {
     }
     
     func addPass(_ pass: PassData) {
-        passwords.append(pass)
+        if passwords != nil {
+            passwords!.append(pass)
+        } else {
+            passwords = [pass]
+        }
+    }
+    
+    func getPass(_ index: Int) -> PassData? {
+        guard passwords != nil else  {return nil}
+        
+        return passwords!.count > index ? passwords![index] : nil
     }
     
     func update(_ index: Int, _ data: PassData) -> Bool {
-        if (passwords.count > index) {
-            passwords[index] = data
+        guard passwords != nil else  {return false}
+        
+        if passwords!.count > index {
+            passwords![index] = data
             return true
         } else {
             return false
@@ -39,8 +51,10 @@ class PassKeeper {
     }
     
     func delete(_ index: Int) -> Bool {
-        if (passwords.count > index) {
-            passwords.remove(at: index)
+        guard passwords != nil else  {return false}
+        
+        if passwords!.count > index {
+            passwords!.remove(at: index)
             return true
         } else {
             return false

@@ -13,11 +13,18 @@ class Storage {
     
     init() {
         passKeeper = PassKeeper()
-        loadPasswords()
+    }
+    
+    func keeper() -> PassKeeper {
+        if (passKeeper.getPasswords() == nil) {
+            loadPasswords()
+        }
+        
+        return passKeeper
     }
     
     func getPasswords() -> [PassData] {
-        return passKeeper.getPasswords()
+        return keeper().getPasswords() ?? []
     }
     
     func loadPasswords() {
@@ -27,30 +34,28 @@ class Storage {
         }
     }
     
-    func setPasswords(_ passArray: [PassData]) {
-        passKeeper.setPasswords(passArray)
+    func setPasswords(_ passwords: [PassData]) {
+        keeper().setPasswords(passwords)
     }
     
     func savePass(_ pass: PassData) {
-        passKeeper.addPass(pass)
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
+        keeper().addPass(pass)
+        UserDefaults.standard.set(try? PropertyListEncoder().encode(keeper().getPasswords()), forKey: Config.passwordsArrayKey)
     }
     
     func updatePass(_ index: Int, _ data: PassData) {
-        if passKeeper.update(index, data) {
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
+        if keeper().update(index, data) {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(keeper().getPasswords()), forKey: Config.passwordsArrayKey)
         }
     }
     
     func getPass(_ index: Int) -> PassData? {
-        let passwords = passKeeper.getPasswords()
-        
-        return (passwords.count > index) ? passwords[index] : nil
+        return keeper().getPass(index)
     }
     
     func deletePass(_ index: Int) {
-        if passKeeper.delete(index) {
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(passKeeper.getPasswords()), forKey: Config.passwordsArrayKey)
+        if keeper().delete(index) {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(keeper().getPasswords()), forKey: Config.passwordsArrayKey)
         }
     }
     

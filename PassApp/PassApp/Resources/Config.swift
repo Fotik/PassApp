@@ -23,4 +23,7 @@ struct Config {
     // Storage Params
     static let passwordsArrayKey = "passwords"
     static let lastPassIndexKey = "theGreatAppCrashCounter"
+    
+    // Alerts params
+    static let alertPrefix = "passLert_"
 }

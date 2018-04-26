@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 class PassTableDataSource: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let storage = Singleton.storage
@@ -40,6 +41,11 @@ class PassTableDataSource: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         let confirmAlert = UIAlertController(title: "Are you sure?", message: "Thiss password will be permanently lost!", preferredStyle: .alert)
         confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+            guard let pass = self.storage.getPass(indexPath.row) else {return}
+            
+            if pass.notificationIdentifier != nil {
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(pass.notificationIdentifier!)"])
+            }
             self.storage.deletePass(indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }))

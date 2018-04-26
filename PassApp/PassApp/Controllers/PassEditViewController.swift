@@ -49,7 +49,7 @@ class PassEditViewController: UIViewController {
             var passData: PassData
             
             if notificationEditSwitch.isOn {
-                passData = PassData(nameInput.text!, passInput.text!, getNotificationTime(Config.notificationIntervals[timeIntervalControl.selectedSegmentIndex], datePicker.date))
+                passData = PassData(nameInput.text!, passInput.text!, UInt8(timeIntervalControl.selectedSegmentIndex), datePicker.date)
             } else {
                 passData = PassData(nameInput.text!, passInput.text!)
             }
@@ -101,7 +101,7 @@ class PassEditViewController: UIViewController {
         storage.setPasswords([])
     }
     
-    // MARK: - Custom Funcs
+    // MARK: - Validation
     
     private func validateData() -> ValidationResult {
         if (nameInput.text == "" || passInput.text == "" || passConfirmInput.text == "") {
@@ -120,30 +120,12 @@ class PassEditViewController: UIViewController {
         return password != confirm ? ValidationResult(type: .error, message: "Paswords in both fields must be the same") : ValidationResult(type: .ok, message: "")
     }
     
+    // MARK: - Init
+    
     private func initDelegates() {
         nameInput.delegate = self
         passInput.delegate = self
         passConfirmInput.delegate = self
-    }
-    
-    private func togglePass(_ state: VisibilityState) {
-        passInput.isSecureTextEntry = (state != .visible)
-        passConfirmInput.isSecureTextEntry = (state != .visible)
-        togglePasswordsBtn.setTitle((state == .visible) ? "Hide" : "Show", for: .normal)
-    }
-    
-    private func save(_ pass: PassData) {
-        var passToSave = pass
-        
-        if passIndex != nil {
-            storage.updatePass(passIndex!, passToSave)
-        } else {
-            if passToSave.notificationTime != nil {
-                passToSave.notificationIdentifier = setNotification(passToSave)
-                storage.riseLastPassIndex()
-            }
-            storage.savePass(passToSave)
-        }
     }
     
     private func fillData() {
@@ -152,11 +134,112 @@ class PassEditViewController: UIViewController {
         nameInput.text = pass.resource
         passInput.text = pass.password
         passConfirmInput.text = pass.password
+        if (pass.notificationCountPoint != nil) {
+            notificationEditSwitch.isOn = true
+            notificationEditView.isHidden = false
+            timeIntervalControl.selectedSegmentIndex = Int(pass.intervalSegment!)
+            datePicker.date = pass.notificationTime!
+        }
     }
     
-    private func getNotificationTime(_ interval: Int, _ time: Date) -> DateComponents {
+    // MARK: - Interface
+    
+    private func togglePass(_ state: VisibilityState) {
+        passInput.isSecureTextEntry = (state != .visible)
+        passConfirmInput.isSecureTextEntry = (state != .visible)
+        togglePasswordsBtn.setTitle((state == .visible) ? "Hide" : "Show", for: .normal)
+    }
+    
+    @objc func backAction() {
+        let confirmAlert = UIAlertController(title: "Are you sure?", message: "All entered data will be lost after this action.", preferredStyle: .alert)
+        confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+            self.navigationController?.popToRootViewController(animated: true)
+        }))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in self.dismiss(animated: true, completion: nil)}))
+        present(confirmAlert, animated: true, completion: nil)
+    }
+    
+    // MARK: - Data Management
+    
+    private func save(_ pass: PassData) {
+        if passIndex != nil {
+            let old = storage.getPass(passIndex!)
+            if old != nil {
+                let updatedPass = updateNotification(old!, pass)
+                storage.updatePass(passIndex!, updatedPass)
+            } else {
+                saveNewPass(pass)
+            }
+        } else {
+            saveNewPass(pass)
+        }
+    }
+    
+    private func saveNewPass(_ pass: PassData) {
+        var passToSave = pass
+        
+        if passToSave.notificationTime != nil {
+            passToSave = setNotification(passToSave, nil, nil) ?? passToSave
+        }
+        storage.savePass(passToSave)
+    }
+    
+    private func comparePasswords(_ p1: PassData, _ p2: PassData) -> ComparePasswordsResult {
+        var notificationIsEqual: Bool
+        
+        if p1.notificationCountPoint == nil && p2.notificationCountPoint != nil {
+            notificationIsEqual = false
+        } else if p2.notificationCountPoint == nil && p1.notificationCountPoint != nil {
+            notificationIsEqual = false
+        } else if p1.notificationCountPoint == nil && p2.notificationCountPoint == nil {
+            notificationIsEqual = true
+        } else {
+            notificationIsEqual = p1.notificationCountPoint! == p2.notificationCountPoint!
+        }
+        
+        return ComparePasswordsResult(p1.resource == p2.resource, p1.password == p2.password, notificationIsEqual)
+    }
+    
+    // MARK: - Notifications
+    
+    private func updateNotification(_ old: PassData, _ new: PassData) -> PassData {
+        let comparedPasswords = comparePasswords(old, new)
+        var newPass = new
+        
+        if !comparedPasswords.isEqual {
+            if !comparedPasswords.notificationIsEqual {
+                let identifier = old.notificationIdentifier
+                
+                if new.notificationCountPoint == nil {
+                    if identifier != nil {
+                        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(identifier!)"])
+                    }
+                } else {
+                    if (!comparedPasswords.passwordIsEqual) {
+                        if identifier != nil {
+                            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(identifier!)"])
+                        }
+                        
+                        newPass = setNotification(newPass, identifier, nil) ?? newPass
+                    } else {
+                        if identifier != nil {
+                            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(identifier!)"])
+                        }
+                        
+                        newPass.notificationCountPoint = old.notificationCountPoint ?? Date()
+                        
+                        newPass = setNotification(newPass, identifier, getNotificationTime(newPass.intervalSegment!, newPass.notificationTime!, old.notificationCountPoint)) ?? newPass
+                    }
+                }
+            }
+        }
+        
+        return newPass
+    }
+    
+    private func getNotificationTime(_ interval: UInt8, _ time: Date, _ countPoint: Date?) -> DateComponents {
         var dateInfo = DateComponents()
-        let intervalDate = Date() + TimeInterval(interval)
+        let intervalDate = (countPoint ?? Date()) + TimeInterval(Config.notificationIntervals[Int(interval)])
         
         dateInfo.year = Calendar.current.component(.year, from: intervalDate)
         dateInfo.month = Calendar.current.component(.month, from: intervalDate)
@@ -167,25 +250,23 @@ class PassEditViewController: UIViewController {
         return dateInfo
     }
     
-    private func setNotification(_ pass: PassData) -> UNNotificationRequest? {
-        guard pass.notificationTime != nil else {return nil}
+    private func setNotification(_ pass: PassData, _ identifier: UInt?, _ dateParams: DateComponents?) -> PassData? {
+        var passToSave = pass
+        guard passToSave.intervalSegment != nil && passToSave.notificationTime != nil else {return nil}
+        
+        passToSave.notificationIdentifier = identifier ?? storage.getLastPassIndex()
+        let date = dateParams ?? getNotificationTime(passToSave.intervalSegment!, passToSave.notificationTime!, nil)
         
         let content = UNMutableNotificationContent()
         content.title = NSString.localizedUserNotificationString(forKey: "Change password", arguments: nil)
-        content.body = NSString.localizedUserNotificationString(forKey: "You need to update the password for \(pass.resource)", arguments: nil)
+        content.body = NSString.localizedUserNotificationString(forKey: "You need to update the password for \(passToSave.resource)", arguments: nil)
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: pass.notificationTime!, repeats: false)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
         
-        return UNNotificationRequest(identifier: "passAlert_\(storage.getLastPassIndex())", content: content, trigger: trigger)
-    }
-    
-    @objc func backAction() {
-        let confirmAlert = UIAlertController(title: "Are you sure?", message: "All entered data will be lost after this action.", preferredStyle: .alert)
-        confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
-            self.navigationController?.popToRootViewController(animated: true)
-        }))
-        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in self.dismiss(animated: true, completion: nil)}))
-        present(confirmAlert, animated: true, completion: nil)
+        _ = UNNotificationRequest(identifier: "\(Config.alertPrefix)\(storage.getLastPassIndex())", content: content, trigger: trigger)
+        
+        storage.riseLastPassIndex()
+        return passToSave
     }
 
     /*
