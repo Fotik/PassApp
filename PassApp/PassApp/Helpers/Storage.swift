@@ -78,4 +78,8 @@ class Storage {
             UserDefaults.standard.set(0, forKey: Config.lastPassIndexKey)
         }
     }
+    
+    func get(_ key: String) -> Any? {
+        return UserDefaults.standard.value(forKey: key)
+    }
 }
