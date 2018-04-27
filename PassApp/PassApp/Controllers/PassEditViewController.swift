@@ -94,7 +94,7 @@ class PassEditViewController: UIViewController {
             fillData()
         }
         
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backAction))
     }
 
     override func didReceiveMemoryWarning() {
@@ -158,7 +158,7 @@ class PassEditViewController: UIViewController {
         confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
             self.navigationController?.popToRootViewController(animated: true)
         }))
-        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in self.dismiss(animated: true, completion: nil)}))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in confirmAlert.dismiss(animated: true, completion: nil)}))
         present(confirmAlert, animated: true, completion: nil)
     }
     
