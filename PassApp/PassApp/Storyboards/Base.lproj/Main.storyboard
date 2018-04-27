@@ -59,13 +59,13 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKX-HK-IZd">
-                                                            <rect key="frame" x="0.0" y="0.0" width="192" height="43.5"/>
+                                                            <rect key="frame" x="8" y="0.0" width="176" height="43.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XxK-Oz-NIk">
-                                                            <rect key="frame" x="192" y="0.0" width="64" height="43"/>
+                                                            <rect key="frame" x="184" y="0.0" width="64" height="43"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="64" id="0lx-RU-CuZ"/>
                                                             </constraints>
@@ -81,7 +81,7 @@
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCk-6w-OJE">
-                                                            <rect key="frame" x="256" y="0.0" width="64" height="43"/>
+                                                            <rect key="frame" x="248" y="0.0" width="64" height="43"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="64" id="1Hv-eC-O4O"/>
                                                             </constraints>
@@ -100,11 +100,11 @@
                                                     <constraints>
                                                         <constraint firstAttribute="bottom" secondItem="xKX-HK-IZd" secondAttribute="bottom" id="9SX-Vi-RUU"/>
                                                         <constraint firstItem="XxK-Oz-NIk" firstAttribute="leading" secondItem="xKX-HK-IZd" secondAttribute="trailing" id="A6W-gx-Iau"/>
+                                                        <constraint firstAttribute="trailingMargin" secondItem="mCk-6w-OJE" secondAttribute="trailing" id="b4G-B0-vyL"/>
                                                         <constraint firstItem="mCk-6w-OJE" firstAttribute="leading" secondItem="XxK-Oz-NIk" secondAttribute="trailing" id="bZG-Fu-Vbv"/>
-                                                        <constraint firstAttribute="trailing" secondItem="mCk-6w-OJE" secondAttribute="trailing" id="dfM-He-YOb"/>
-                                                        <constraint firstItem="xKX-HK-IZd" firstAttribute="leading" secondItem="4wC-78-vdz" secondAttribute="leading" id="hSW-qm-lfv"/>
                                                         <constraint firstAttribute="bottom" secondItem="mCk-6w-OJE" secondAttribute="bottom" id="iDv-Qw-19J"/>
                                                         <constraint firstAttribute="bottom" secondItem="XxK-Oz-NIk" secondAttribute="bottom" id="j0b-jP-dA2"/>
+                                                        <constraint firstItem="xKX-HK-IZd" firstAttribute="leading" secondItem="4wC-78-vdz" secondAttribute="leadingMargin" id="t2j-7n-5eD"/>
                                                         <constraint firstItem="XxK-Oz-NIk" firstAttribute="top" secondItem="4wC-78-vdz" secondAttribute="top" id="url-AT-0L2"/>
                                                         <constraint firstItem="mCk-6w-OJE" firstAttribute="top" secondItem="4wC-78-vdz" secondAttribute="top" id="ycT-Vi-lYv"/>
                                                         <constraint firstItem="xKX-HK-IZd" firstAttribute="top" secondItem="4wC-78-vdz" secondAttribute="top" id="zoW-1y-WnT"/>
@@ -254,10 +254,10 @@
                                                     <constraint firstItem="OP6-6q-aga" firstAttribute="centerY" secondItem="ifg-O7-kSk" secondAttribute="centerY" id="yNa-e7-yfc"/>
                                                 </constraints>
                                             </view>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nY2-vi-fTX">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nY2-vi-fTX">
                                                 <rect key="frame" x="16" y="409" width="288" height="253"/>
                                                 <subviews>
-                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Vnu-5B-BzZ">
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Vnu-5B-BzZ">
                                                         <rect key="frame" x="0.0" y="0.0" width="288" height="29"/>
                                                         <segments>
                                                             <segment title="1 Week"/>
@@ -265,7 +265,7 @@
                                                             <segment title="1 Month"/>
                                                         </segments>
                                                     </segmentedControl>
-                                                    <datePicker contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="p2k-6c-U06">
+                                                    <datePicker contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="p2k-6c-U06">
                                                         <rect key="frame" x="0.0" y="36" width="288" height="216"/>
                                                         <date key="date" timeIntervalSinceReferenceDate="545391783.82014799">
                                                             <!--2018-04-14 09:43:03 +0000-->

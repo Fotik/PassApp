@@ -74,11 +74,13 @@ class PassEditViewController: UIViewController {
     
     @IBAction func toggleNotificationEdit(_ sender: UISwitch) {
         if sender.isOn {
-            notificationEditView.isHidden = false
             notificationEditSwitchLabel.text = "Disable notifications"
+            timeIntervalControl.isEnabled = true
+            datePicker.isEnabled = true
         } else {
-            notificationEditView.isHidden = true
             notificationEditSwitchLabel.text = "Enable notifications"
+            timeIntervalControl.isEnabled = false
+            datePicker.isEnabled = false
         }
     }
     
@@ -136,7 +138,8 @@ class PassEditViewController: UIViewController {
         passConfirmInput.text = pass.password
         if (pass.notificationCountPoint != nil) {
             notificationEditSwitch.isOn = true
-            notificationEditView.isHidden = false
+            timeIntervalControl.isEnabled = true
+            datePicker.isEnabled = true
             timeIntervalControl.selectedSegmentIndex = Int(pass.intervalSegment!)
             datePicker.date = pass.notificationTime!
         }
@@ -204,18 +207,17 @@ class PassEditViewController: UIViewController {
     
     private func updateNotification(_ old: PassData, _ new: PassData) -> PassData {
         let comparedPasswords = comparePasswords(old, new)
+        let identifier = old.notificationIdentifier
         var newPass = new
         
         if !comparedPasswords.isEqual {
             if !comparedPasswords.notificationIsEqual {
-                let identifier = old.notificationIdentifier
-                
                 if new.notificationCountPoint == nil {
                     if identifier != nil {
                         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(identifier!)"])
                     }
                 } else {
-                    if (!comparedPasswords.passwordIsEqual) {
+                    if !comparedPasswords.passwordIsEqual {
                         if identifier != nil {
                             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(identifier!)"])
                         }
@@ -232,6 +234,12 @@ class PassEditViewController: UIViewController {
                     }
                 }
             }
+        } else if !comparedPasswords.passwordIsEqual {
+            if identifier != nil {
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(Config.alertPrefix)\(identifier!)"])
+            }
+            
+            newPass = setNotification(newPass, identifier, nil) ?? newPass
         }
         
         return newPass
@@ -251,21 +259,36 @@ class PassEditViewController: UIViewController {
     }
     
     private func setNotification(_ pass: PassData, _ identifier: UInt?, _ dateParams: DateComponents?) -> PassData? {
+        
         var passToSave = pass
         guard passToSave.intervalSegment != nil && passToSave.notificationTime != nil else {return nil}
         
         passToSave.notificationIdentifier = identifier ?? storage.getLastPassIndex()
         let date = dateParams ?? getNotificationTime(passToSave.intervalSegment!, passToSave.notificationTime!, nil)
         
-        let content = UNMutableNotificationContent()
-        content.title = NSString.localizedUserNotificationString(forKey: "Change password", arguments: nil)
-        content.body = NSString.localizedUserNotificationString(forKey: "You need to update the password for \(passToSave.resource)", arguments: nil)
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert]) { [weak self] (granted, error) in
+            if granted {
+                
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: "Change password", arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: "You need to update the password for \(passToSave.resource)", arguments: nil)
+                
+                let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
+                
+                let request = UNNotificationRequest(identifier: "\(Config.alertPrefix)\(self?.storage.getLastPassIndex() ?? 0)", content: content, trigger: trigger)
+                
+                let center = UNUserNotificationCenter.current()
+                center.add(request) { (error: Error?) in
+                    if let theError = error {
+                        print(theError.localizedDescription)
+                    }
+                }
+                
+                self?.storage.riseLastPassIndex()
+            }
+        }
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
-        
-        _ = UNNotificationRequest(identifier: "\(Config.alertPrefix)\(storage.getLastPassIndex())", content: content, trigger: trigger)
-        
-        storage.riseLastPassIndex()
         return passToSave
     }
 
