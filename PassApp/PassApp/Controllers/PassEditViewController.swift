@@ -154,12 +154,19 @@ class PassEditViewController: UIViewController {
     }
     
     @objc func backAction() {
-        let confirmAlert = UIAlertController(title: "Are you sure?", message: "All entered data will be lost after this action.", preferredStyle: .alert)
-        confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+        let old = (passIndex != nil) ? storage.getPass(passIndex!) : nil
+        
+        if (old == nil && (nameInput.text != "" || passInput.text != "") || old != nil && !comparePasswords(old!, PassData(nameInput.text!, passInput.text!)).isEqual) {
+            let confirmAlert = UIAlertController(title: "Are you sure?", message: "All entered data will be lost after this action.", preferredStyle: .alert)
+            confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+                self.navigationController?.popToRootViewController(animated: true)
+            }))
+            confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in
+                confirmAlert.dismiss(animated: true, completion: nil)}))
+            present(confirmAlert, animated: true, completion: nil)
+        } else {
             self.navigationController?.popToRootViewController(animated: true)
-        }))
-        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {action in confirmAlert.dismiss(animated: true, completion: nil)}))
-        present(confirmAlert, animated: true, completion: nil)
+        }
     }
     
     // MARK: - Data Management
